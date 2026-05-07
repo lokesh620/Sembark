@@ -3,19 +3,25 @@ import ProductCard from "../components/ProductCard";
 import FilterPanel from "../components/Filters";
 import { type Product } from "../types/product";
 import { getProducts, getCategories } from "../services/productService";
-import { type Category } from "../types/category";
 import { useUrlParams } from "../hooks/useURLParams";
+import { useProductsContext } from "../hooks/useProductContext";
 
 const LIMIT = 20;
 
 const Home = () => {
+  const {
+    products,
+    setProducts,
+    offset,
+    setOffset,
+    hasMore,
+    setHasMore,
+    loading,
+    setLoading,
+    categories,
+    setCategories
+  } = useProductsContext();
   const [urlFilters, setUrlFilters] = useUrlParams();
-  
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
 
   //state for filter
   const [title, setTitle] = useState(urlFilters.title);
@@ -37,6 +43,7 @@ const Home = () => {
   }, [title, price, priceMin, priceMax, selectedCategories, sort, setUrlFilters]);
 
   useEffect(() => {
+    if (categories.length > 0) return;
     const fetchData = async () => {
       const categoriesData = await getCategories();
       setCategories(categoriesData);
@@ -79,31 +86,25 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setProducts([]);
-      setOffset(0);
-      setHasMore(true);
-      fetchProducts(0, true);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [title, price, priceMin, priceMax, selectedCategories]);
+    if (products.length > 0) return;
+    fetchProducts(0, true);
+  }, []);
 
-useEffect(() => {
-  const handleScroll = () => {
-    const bottom =
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 100;
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 100;
 
-    if (bottom && !loading && hasMore) {
-      fetchProducts(offset);
-      setOffset((prev) => prev + LIMIT);
-    }
-  };
+      if (bottom && !loading && hasMore) {
+        fetchProducts(offset);
+        setOffset((prev) => prev + LIMIT);
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [offset, loading, hasMore, title, price, priceMin]);
-  // }, [offset, loading, hasMore, title, price, priceMin, priceMax]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [offset, loading, hasMore, title, price, priceMin]);
 
   const filteredAndSorted = applyFilters(products).sort((a, b) => {
     if (sort === "low") return a.price - b.price;

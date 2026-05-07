@@ -45,7 +45,7 @@ const FilterPanel = ({
     }
   };
 
-  const topCategories = categories.slice(0, 5);
+  const topCategories = categories.slice(1, 5);
 
   return (
     <div>
@@ -91,9 +91,7 @@ const FilterPanel = ({
         />
       </div>
 
-      {/* 📂 CATEGORIES */}
       <h5>Categories</h5>
-
       {topCategories.map((cat) => (
         <div key={cat.id} className="form-check">
           <input
@@ -106,7 +104,6 @@ const FilterPanel = ({
         </div>
       ))}
 
-      {/* 🔃 SORT */}
       <h5 className="mt-3">Sort</h5>
       <select
         className="form-select"

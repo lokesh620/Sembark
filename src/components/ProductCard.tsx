@@ -1,16 +1,27 @@
-import { type Product } from "../types/product";
+import { Link } from "react-router-dom";
 
-type Props = {
-  product: Product;
-};
-
-const ProductCard = ({ product }: Props) => {
+const ProductCard = ({ product }: any) => {
   return (
-    <div className="card h-100 shadow-sm">
-      <img src={product.images} className="card-img-top" alt={product.title} />
-      <div className="card-body">
-        <h5 className="card-title">{product.title}</h5>
-        <p className="card-text text-muted">₹{product.price}</p>
+    <div className="card h-100">
+
+      <img
+        src={product.images?.[0]}
+        className="card-img-top"
+        alt={product.title}
+        style={{ height: "220px", objectFit: "cover" }}
+      />
+
+      <div className="card-body d-flex flex-column">
+        <h5>{product.title}</h5>
+
+        <p className="fw-bold">${product.price}</p>
+
+        <Link
+          to={`/product/${product.id}/details`}
+          className="btn btn-warning text-dark mt-auto"
+        >
+          View Details
+        </Link>
       </div>
     </div>
   );

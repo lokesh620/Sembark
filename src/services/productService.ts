@@ -1,5 +1,4 @@
 import type { Category } from "../types/category";
-import type { Product } from "../types/product";
 
 export const getProducts = async (params: {
   offset?: number;
@@ -42,7 +41,6 @@ export const getProducts = async (params: {
   }
 
   const url = `https://api.escuelajs.co/api/v1/products?${query.toString()}`;
-  console.log("Fetching URL:", url); // For debugging
 
   const res = await fetch(url);
   const data = await res.json();
@@ -56,6 +54,19 @@ export const getCategories = async (): Promise<Category[]> => {
     const data = await res.json();
     return data;
   } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+};
+
+export const getSingleProduct = async (id: string) => {
+  try {
+    const res = await fetch(
+      `https://api.escuelajs.co/api/v1/products/${id}`
+    );
+    return res.json();
+  }
+  catch (error) {
     console.error("Error fetching products:", error);
     return [];
   }
