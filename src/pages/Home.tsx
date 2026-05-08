@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ProductCard from "../components/ProductCard";
 import FilterPanel from "../components/Filters";
 import { type Product } from "../types/product";
@@ -89,6 +89,23 @@ const Home = () => {
     if (products.length > 0) return;
     fetchProducts(0, true);
   }, []);
+
+  const isFirstFilterRun = useRef(true);
+
+  useEffect(() => {
+    if (isFirstFilterRun.current) {
+      isFirstFilterRun.current = false;
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setHasMore(true);
+      setOffset(0);
+      fetchProducts(0, true);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [title, price, priceMin, priceMax]);
 
   useEffect(() => {
     const handleScroll = () => {

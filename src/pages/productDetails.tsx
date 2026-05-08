@@ -9,15 +9,15 @@ const ProductDetails = () => {
     const navigate = useNavigate();
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [activeImage, setActiveImage] = useState<string>("");
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 setLoading(true);
-
                 const data = await getSingleProduct(id!);
-
                 setProduct(data);
+                setActiveImage(data?.images?.[0] ?? "");
             } catch (error) {
                 console.error(error);
             } finally {
@@ -53,12 +53,11 @@ const ProductDetails = () => {
                 {/* Images */}
                 <div className="col-md-6">
                     <img
-                        src={product.images?.[0]}
+                        src={activeImage || product.images?.[0]}
                         alt={product.title}
                         className="img-fluid rounded border"
                     />
 
-                    {/* Thumbnail Images */}
                     <div className="d-flex gap-2 mt-3">
                         {product.images?.map((img: string, index: number) => (
                             <img
@@ -67,9 +66,15 @@ const ProductDetails = () => {
                                 alt="thumbnail"
                                 width="80"
                                 height="80"
+                                onClick={() => setActiveImage(img)}
                                 style={{
                                     objectFit: "cover",
                                     borderRadius: "8px",
+                                    cursor: "pointer",
+                                    border:
+                                        activeImage === img
+                                            ? "2px solid #0d6efd"
+                                            : "2px solid transparent",
                                 }}
                             />
                         ))}
