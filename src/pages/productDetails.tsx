@@ -30,84 +30,104 @@ const ProductDetails = () => {
 
     if (loading) {
         return (
-            <div className="text-center mt-5">
-                <div className="spinner-border text-primary"></div>
+            <div
+                className="text-center mt-5"
+                role="status"
+                aria-live="polite"
+            >
+                <div className="spinner-border text-primary" aria-hidden="true"></div>
+                <span className="visually-hidden">Loading product</span>
             </div>
         );
     }
 
     if (!product) {
-        return <h3 className="text-center mt-5">Product not found</h3>;
+        return <h1 className="text-center mt-5">Product not found</h1>;
     }
 
     return (
-        <div className="container mt-5">
+        <main className="container mt-5 page-fade">
             <button
+                type="button"
                 className="btn btn-outline-dark mb-4"
                 onClick={() => navigate(-1)}
+                aria-label="Go back to previous page"
             >
-                ← Back
+                <span aria-hidden="true">←</span> Back
             </button>
-            <div className="row">
 
-                {/* Images */}
-                <div className="col-md-6">
+            <article className="row">
+                <section className="col-md-6" aria-label="Product images">
                     <img
                         src={activeImage || product.images?.[0]}
                         alt={product.title}
                         className="img-fluid rounded border"
                     />
 
-                    <div className="d-flex gap-2 mt-3">
-                        {product.images?.map((img: string, index: number) => (
-                            <img
-                                key={index}
-                                src={img}
-                                alt="thumbnail"
-                                width="80"
-                                height="80"
-                                onClick={() => setActiveImage(img)}
-                                style={{
-                                    objectFit: "cover",
-                                    borderRadius: "8px",
-                                    cursor: "pointer",
-                                    border:
-                                        activeImage === img
-                                            ? "2px solid #0d6efd"
-                                            : "2px solid transparent",
-                                }}
-                            />
-                        ))}
-                    </div>
-                </div>
+                    <ul
+                        className="d-flex gap-2 mt-3 list-unstyled mb-0"
+                        aria-label="Image thumbnails"
+                    >
+                        {product.images?.map((img: string, index: number) => {
+                            const isActive = activeImage === img;
+                            return (
+                                <li key={index}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveImage(img)}
+                                        aria-label={`Show image ${index + 1} of ${product.title}`}
+                                        aria-pressed={isActive}
+                                        style={{
+                                            padding: 0,
+                                            border: "none",
+                                            background: "none",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        <img
+                                            src={img}
+                                            alt=""
+                                            width={80}
+                                            height={80}
+                                            style={{
+                                                objectFit: "cover",
+                                                borderRadius: "8px",
+                                                border: isActive
+                                                    ? "2px solid #0d6efd"
+                                                    : "2px solid transparent",
+                                            }}
+                                        />
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
 
-                {/* Details */}
-                <div className="col-md-6">
-
-                    <h2>{product.title}</h2>
+                <section className="col-md-6">
+                    <h1>{product.title}</h1>
 
                     <p className="text-muted">
                         Category: {product.category?.name}
                     </p>
 
-                    <h3 className="text-success mb-3">
+                    <p className="h3 text-success mb-3">
                         ${product.price}
-                    </h3>
+                    </p>
 
                     <p>{product.description}</p>
 
                     <button
+                        type="button"
                         className="btn btn-success btn-lg"
                         onClick={() => addToCart(product)}
+                        aria-label={`Add ${product.title} to cart`}
                     >
                         Add To Cart
                     </button>
-
-                </div>
-
-            </div>
-
-        </div>
+                </section>
+            </article>
+        </main>
     );
 };
 

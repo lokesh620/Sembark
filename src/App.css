@@ -6,3 +6,55 @@
 h5 {
   font-weight: 600;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-fade {
+  animation: fadeIn 250ms ease-out both;
+}
+
+@keyframes cartItemIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes cartItemOut {
+  from { opacity: 1; transform: translateX(0); max-height: 240px; }
+  to   { opacity: 0; transform: translateX(40px); max-height: 0;
+         padding-top: 0; padding-bottom: 0;
+         margin-top: 0; margin-bottom: 0; }
+}
+
+.cart-item {
+  animation: cartItemIn 250ms ease-out both;
+  overflow: hidden;
+}
+
+.cart-item.is-leaving {
+  animation: cartItemOut 280ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes badgeBump {
+  0%   { transform: translate(-50%, -50%) scale(1); }
+  50%  { transform: translate(-50%, -50%) scale(1.4); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.cart-badge {
+  animation: badgeBump 280ms ease-out;
+}
+
+.visually-hidden-focusable:focus { outline: 2px solid #0d6efd; }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade,
+  .cart-item,
+  .cart-item.is-leaving,
+  .cart-badge {
+    animation: none !important;
+  }
+}

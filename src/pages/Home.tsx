@@ -130,9 +130,10 @@ const Home = () => {
   });
 
   return (
-    <div className="container mt-4">
+    <main className="container mt-4 page-fade">
+      <h1 className="visually-hidden">Products</h1>
       <div className="row">
-        <div className="col-md-3">
+        <aside className="col-md-3" aria-label="Product filters">
           <FilterPanel
             categories={categories}
             selectedCategories={selectedCategories}
@@ -148,32 +149,41 @@ const Home = () => {
             price={price}
             setPrice={setPrice}
           />
-        </div>
+        </aside>
 
-        <div className="col-md-9">
-          <div className="row">
-            {loading && products.length === 0 ? (
-              <div className="text-center w-100 mt-5">
-                <div className="spinner-border text-primary" />
-                <p>Loading products...</p>
-              </div>
-            ) : (
-              filteredAndSorted.map((product) => (
-                <div className="col-md-4 mb-4" key={product.id}>
+        <section className="col-md-9" aria-label="Product list">
+          {loading && products.length === 0 ? (
+            <div
+              className="text-center w-100 mt-5"
+              role="status"
+              aria-live="polite"
+            >
+              <div className="spinner-border text-primary" aria-hidden="true" />
+              <p>Loading products...</p>
+            </div>
+          ) : (
+            <ul className="row list-unstyled">
+              {filteredAndSorted.map((product) => (
+                <li className="col-md-4 mb-4" key={product.id}>
                   <ProductCard product={product} />
-                </div>
-              ))
-            )}
-          </div>
+                </li>
+              ))}
+            </ul>
+          )}
           {loading && products.length > 0 && (
-            <div className="text-center my-3">
-              <div className="spinner-border text-primary" />
+            <div
+              className="text-center my-3"
+              role="status"
+              aria-live="polite"
+            >
+              <div className="spinner-border text-primary" aria-hidden="true" />
+              <span className="visually-hidden">Loading more products</span>
             </div>
           )}
           {!hasMore && <p className="text-center text-muted">No more products</p>}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }: any) => {
   return (
-    <div className="card h-100">
-
+    <article className="card h-100">
       <img
         src={product.images?.[0]}
         className="card-img-top"
@@ -12,18 +11,21 @@ const ProductCard = ({ product }: any) => {
       />
 
       <div className="card-body d-flex flex-column">
-        <h5>{product.title}</h5>
+        <h2 className="h5">{product.title}</h2>
 
-        <p className="fw-bold">${product.price}</p>
+        <p className="fw-bold" aria-label={`Price ${product.price} dollars`}>
+          ${product.price}
+        </p>
 
         <Link
           to={`/product/${product.id}/details`}
           className="btn btn-warning text-dark mt-auto"
+          aria-label={`View details for ${product.title}`}
         >
           View Details
         </Link>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# Sembark E-commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript + Vite e-commerce app built against the [Platzi Fake Store API](https://api.escuelajs.co). It supports product browsing with infinite scroll, server-side filtering by title, price, and category, client-side sorting, a cart, and shareable URL filters.
 
-Currently, two official plugins are available:
+**Repository:** https://github.com/lokesh620/Sembark.git
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+- React 19 + TypeScript
+- Vite
+- React Router DOM 7
+- Bootstrap 5
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Prerequisites
 
-## Expanding the ESLint configuration
+- [Node.js](https://nodejs.org/) 18 or newer (20+ recommended)
+- npm 9+ (bundled with Node)
+- Git
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Setup
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Clone the repository:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+   ```bash
+   git clone https://github.com/lokesh620/Sembark.git
+   cd Sembark
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+## Running the App
+
+Start the development server:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Vite will print a local URL (typically http://localhost:5173). Open it in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Available Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Script            | Description                                  |
+| ----------------- | -------------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with HMR           |
+| `npm run build`   | Type-check and produce a production build    |
+| `npm run preview` | Serve the production build locally           |
+| `npm run lint`    | Run ESLint over the project                  |
+
+## Project Structure
+
 ```
+src/
+  components/      # Reusable UI (FilterPanel, ProductCard, Navbar, ...)
+  pages/           # Route-level views (Home, ProductDetails, Cart)
+  services/        # API client (productService.ts)
+  hooks/           # Custom hooks (useURLParams, useProductContext, ...)
+  context/         # React context providers
+  types/           # Shared TypeScript types
+```
+
+## API
+
+This app consumes the public Platzi Fake Store API — no API key or `.env` is required.
+
+- Products: `https://api.escuelajs.co/api/v1/products`
+- Categories: `https://api.escuelajs.co/api/v1/categories`
+
+## Production Build
+
+```bash
+npm run build
+npm run preview
+```
+
+The build output is emitted to `dist/`.

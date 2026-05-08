@@ -48,74 +48,108 @@ const FilterPanel = ({
   const topCategories = categories.slice(1, 5);
 
   return (
-    <div>
-
-      <h5>Search</h5>
-      <input
-        className="form-control mb-2"
-        placeholder="Search title..."
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-
-      <h5>Price</h5>
-      <input
-        className="form-control mb-2"
-        type="number"
-        placeholder="Exact price"
-        value={price}
-        onChange={(e) =>
-          setPrice(e.target.value ? Number(e.target.value) : "")
-        }
-      />
-
-      <div className="d-flex gap-2 mb-3">
+    <form
+      role="search"
+      aria-label="Product filters"
+      onSubmit={(e) => e.preventDefault()}
+    >
+      <div className="mb-3">
+        <label htmlFor="filter-title" className="form-label fw-bold">
+          Search
+        </label>
         <input
+          id="filter-title"
+          type="search"
           className="form-control"
-          type="number"
-          placeholder="Min"
-          value={priceMin}
-          onChange={(e) =>
-            setPriceMin(e.target.value ? Number(e.target.value) : "")
-          }
-        />
-
-        <input
-          className="form-control"
-          type="number"
-          placeholder="Max"
-          value={priceMax}
-          onChange={(e) =>
-            setPriceMax(e.target.value ? Number(e.target.value) : "")
-          }
+          placeholder="Search title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </div>
 
-      <h5>Categories</h5>
-      {topCategories.map((cat) => (
-        <div key={cat.id} className="form-check">
+      <div className="mb-3">
+        <label htmlFor="filter-price" className="form-label fw-bold">
+          Price
+        </label>
+        <input
+          id="filter-price"
+          className="form-control mb-2"
+          type="number"
+          placeholder="Exact price"
+          value={price}
+          onChange={(e) =>
+            setPrice(e.target.value ? Number(e.target.value) : "")
+          }
+        />
+
+        <div className="d-flex gap-2">
+          <label htmlFor="filter-price-min" className="visually-hidden">
+            Minimum price
+          </label>
           <input
-            type="checkbox"
-            className="form-check-input"
-            checked={selectedCategories.includes(cat.id)}
-            onChange={() => toggleCategory(cat.id)}
+            id="filter-price-min"
+            className="form-control"
+            type="number"
+            placeholder="Min"
+            value={priceMin}
+            onChange={(e) =>
+              setPriceMin(e.target.value ? Number(e.target.value) : "")
+            }
           />
-          <label className="form-check-label">{cat.name}</label>
+
+          <label htmlFor="filter-price-max" className="visually-hidden">
+            Maximum price
+          </label>
+          <input
+            id="filter-price-max"
+            className="form-control"
+            type="number"
+            placeholder="Max"
+            value={priceMax}
+            onChange={(e) =>
+              setPriceMax(e.target.value ? Number(e.target.value) : "")
+            }
+          />
         </div>
-      ))}
+      </div>
 
-      <h5 className="mt-3">Sort</h5>
-      <select
-        className="form-select"
-        value={sort}
-        onChange={(e) => setSort(e.target.value)}
-      >
-        <option value="">None</option>
-        <option value="low">Low → High</option>
-        <option value="high">High → Low</option>
-      </select>
+      <fieldset className="mb-3">
+        <legend className="fs-5 fw-bold">Categories</legend>
+        {topCategories.map((cat) => {
+          const inputId = `filter-cat-${cat.id}`;
+          return (
+            <div key={cat.id} className="form-check">
+              <input
+                id={inputId}
+                type="checkbox"
+                className="form-check-input"
+                checked={selectedCategories.includes(cat.id)}
+                onChange={() => toggleCategory(cat.id)}
+              />
+              <label htmlFor={inputId} className="form-check-label">
+                {cat.name}
+              </label>
+            </div>
+          );
+        })}
+      </fieldset>
 
-    </div>
+      <div>
+        <label htmlFor="filter-sort" className="form-label fw-bold">
+          Sort
+        </label>
+        <select
+          id="filter-sort"
+          className="form-select"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="">None</option>
+          <option value="low">Low → High</option>
+          <option value="high">High → Low</option>
+        </select>
+      </div>
+    </form>
   );
 };
 
