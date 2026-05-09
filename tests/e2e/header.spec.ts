@@ -1,5 +1,52 @@
-import { expect, test } from "@playwright/test";
-import { mockProducts, setupApiMocks } from "./fixtures/mockApi";
+import { expect, test, type Page } from "@playwright/test";
+
+const mockCategories = [
+  { id: 99, name: "Hidden", slug: "hidden", image: "https://placehold.co/200" },
+  { id: 1, name: "Clothes", slug: "clothes", image: "https://placehold.co/200" },
+  { id: 2, name: "Electronics", slug: "electronics", image: "https://placehold.co/200" },
+  { id: 3, name: "Furniture", slug: "furniture", image: "https://placehold.co/200" },
+  { id: 4, name: "Shoes", slug: "shoes", image: "https://placehold.co/200" },
+];
+
+const mockProducts = [
+  {
+    id: 1,
+    title: "Cotton T-Shirt",
+    price: 25,
+    description: "A test product",
+    images: ["https://placehold.co/300"],
+    category: mockCategories[1],
+  },
+];
+
+async function setupApiMocks(page: Page) {
+  await page.route("**/api.escuelajs.co/api/v1/categories", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(mockCategories),
+    })
+  );
+
+  await page.route(/.*api\.escuelajs\.co\/api\/v1\/products(\?.*)?$/, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(mockProducts),
+    })
+  );
+
+  await page.route(/.*api\.escuelajs\.co\/api\/v1\/products\/(\d+)$/, (route) => {
+    const id = Number(route.request().url().match(/\/products\/(\d+)$/)?.[1]);
+    const product = mockProducts.find((p) => p.id === id);
+    if (!product) return route.fulfill({ status: 404, body: "{}" });
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(product),
+    });
+  });
+}
 
 test.describe("Header", () => {
   test.beforeEach(async ({ page }) => {

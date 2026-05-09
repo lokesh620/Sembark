@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(npm install -D @playwright/test)",
-      "PowerShell(npx playwright install chromium)",
-      "PowerShell(npx playwright test --reporter=list)"
-    ]
-  }
-}
